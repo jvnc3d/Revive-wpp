@@ -1,0 +1,590 @@
+bash
+
+cat > /mnt/user-data/outputs/landing_fotos.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restauração de Fotos — Presente Especial para o Dia das Mães</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FAF6F0;
+    --warm: #F2EAD9;
+    --brown: #2C1A0E;
+    --accent: #C8732A;
+    --accent-light: #E8975A;
+    --text: #3A2512;
+    --muted: #7A6050;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 24px 60px;
+    position: relative;
+    background: var(--brown);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, #5C3218 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, #3D1E0A 0%, transparent 60%);
+  }
+
+  .hero-grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px;
+  }
+
+  .hero-tag {
+    position: relative;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    border: 1px solid rgba(200,115,42,0.4);
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero h1 {
+    position: relative;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 7vw, 5rem);
+    line-height: 1.12;
+    color: var(--cream);
+    max-width: 720px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent-light);
+  }
+
+  .hero-sub {
+    position: relative;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    color: rgba(250,246,240,0.65);
+    max-width: 480px;
+    margin-top: 20px;
+    line-height: 1.7;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-cta {
+    position: relative;
+    margin-top: 40px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 16px 32px;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 8px 32px rgba(200,115,42,0.35);
+  }
+  .btn-main:hover { background: #B5631E; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(200,115,42,0.45); }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    animation: fadeUp 1s 1.2s forwards;
+  }
+  .scroll-hint span { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(250,246,240,0.35); }
+  .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, rgba(250,246,240,0.35), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+
+  /* ── SECTION BASE ── */
+  section { padding: 80px 24px; }
+
+  .container { max-width: 900px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    line-height: 1.2;
+    color: var(--brown);
+    max-width: 560px;
+  }
+
+  .section-title em { font-style: italic; color: var(--accent); }
+
+  /* ── SLIDERS ── */
+  .sliders-section { background: var(--warm); }
+
+  .sliders-intro { margin-bottom: 48px; }
+
+  .sliders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+  }
+
+  .slider-card {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(44,26,14,0.12);
+    position: relative;
+    aspect-ratio: 4/3;
+    cursor: ew-resize;
+    user-select: none;
+  }
+
+  .slider-card .after-img,
+  .slider-card .before-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .slider-card .before-img {
+    filter: grayscale(0.7) sepia(0.3) brightness(0.7) contrast(0.85);
+  }
+
+  .slider-overlay {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    width: 50%;
+    transition: none;
+  }
+
+  .slider-overlay .before-img { filter: grayscale(0.7) sepia(0.3) brightness(0.7) contrast(0.85); }
+
+  .slider-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: white;
+    transform: translateX(-50%);
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .slider-handle::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 36px;
+    height: 36px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  }
+
+  .slider-handle::after {
+    content: '◀ ▶';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 9px;
+    color: var(--accent);
+    letter-spacing: -1px;
+    pointer-events: none;
+  }
+
+  .slider-labels {
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 14px;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .slider-labels span {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 100px;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-section { background: var(--cream); }
+
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 32px;
+    margin-top: 48px;
+  }
+
+  .step-item { text-align: center; }
+
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-style: italic;
+    color: var(--accent);
+    opacity: 0.4;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .step-item h3 { font-size: 15px; font-weight: 500; color: var(--brown); margin-bottom: 8px; }
+  .step-item p { font-size: 13.5px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+
+  /* ── PRICE ── */
+  .price-section {
+    background: var(--brown);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .price-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 70% at 50% 50%, #3D2010 0%, transparent 70%);
+  }
+
+  .price-section .section-title { color: var(--cream); max-width: 100%; }
+  .price-section .section-label { color: var(--accent-light); }
+
+  .price-card {
+    position: relative;
+    display: inline-block;
+    background: rgba(250,246,240,0.06);
+    border: 1px solid rgba(250,246,240,0.15);
+    border-radius: 24px;
+    padding: 40px 56px;
+    margin: 40px auto 0;
+    backdrop-filter: blur(10px);
+  }
+
+  .price-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    color: var(--cream);
+    font-style: italic;
+  }
+
+  .price-value sup { font-size: 1.5rem; vertical-align: top; margin-top: 10px; display: inline-block; }
+  .price-sub { font-size: 13px; color: rgba(250,246,240,0.5); margin-top: 4px; letter-spacing: 0.05em; }
+
+  .price-perks {
+    list-style: none;
+    margin: 24px 0 32px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .price-perks li {
+    font-size: 14px;
+    color: rgba(250,246,240,0.75);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 300;
+  }
+
+  .price-perks li::before {
+    content: '✓';
+    color: var(--accent-light);
+    font-size: 13px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  /* ── CTA FINAL ── */
+  .cta-section { background: var(--warm); text-align: center; }
+
+  .cta-section .section-title { margin: 0 auto 16px; }
+
+  .cta-sub { font-size: 15px; color: var(--muted); max-width: 400px; margin: 0 auto 36px; line-height: 1.7; font-weight: 300; }
+
+  .urgency {
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--brown);
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    color: rgba(250,246,240,0.3);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.35; }
+    50%       { opacity: 0.8; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    section { padding: 60px 20px; }
+    .price-card { padding: 32px 28px; }
+    .sliders-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grain"></div>
+  <span class="hero-tag">✦ Especial Dia das Mães</span>
+  <h1>Transforme uma foto antiga em uma <em>lembrança especial</em></h1>
+  <p class="hero-sub">Melhoro suas fotos com inteligência artificial — mais nítidas, coloridas e com muito mais vida.</p>
+  <div class="hero-cta">
+    <a href="https://wa.me/5500000000000?text=Ol%C3%A1%21+Quero+melhorar+uma+foto+para+o+Dia+das+M%C3%A3es!" class="btn-main" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Quero transformar minha foto
+    </a>
+  </div>
+  <div class="scroll-hint">
+    <span>Ver exemplos</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- SLIDERS -->
+<section class="sliders-section">
+  <div class="container">
+    <div class="sliders-intro">
+      <span class="section-label">Antes & Depois</span>
+      <h2 class="section-title">Arraste e veja a <em>transformação</em></h2>
+    </div>
+    <div class="sliders-grid">
+
+      <!-- Slider 1 -->
+      <div class="slider-card" id="s1">
+        <img class="after-img" src="https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=600&q=80" alt="Foto restaurada">
+        <div class="slider-overlay" id="s1-overlay">
+          <img class="before-img" src="https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=600&q=80" alt="Foto original">
+        </div>
+        <div class="slider-handle" id="s1-handle"></div>
+        <div class="slider-labels"><span>Antes</span><span>Depois</span></div>
+      </div>
+
+      <!-- Slider 2 -->
+      <div class="slider-card" id="s2">
+        <img class="after-img" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=80" alt="Foto restaurada">
+        <div class="slider-overlay" id="s2-overlay">
+          <img class="before-img" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=80" alt="Foto original">
+        </div>
+        <div class="slider-handle" id="s2-handle"></div>
+        <div class="slider-labels"><span>Antes</span><span>Depois</span></div>
+      </div>
+
+      <!-- Slider 3 -->
+      <div class="slider-card" id="s3">
+        <img class="after-img" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&q=80" alt="Foto restaurada">
+        <div class="slider-overlay" id="s3-overlay">
+          <img class="before-img" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&q=80" alt="Foto original">
+        </div>
+        <div class="slider-handle" id="s3-handle"></div>
+        <div class="slider-labels"><span>Antes</span><span>Depois</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="how-section">
+  <div class="container">
+    <span class="section-label">Como funciona</span>
+    <h2 class="section-title">Simples como mandar uma <em>mensagem</em></h2>
+    <div class="steps-row">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <h3>Me manda a foto</h3>
+        <p>Pelo WhatsApp mesmo. Pode ser escaneada, tirada com celular, de qualquer jeito.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <h3>Faço o pagamento</h3>
+        <p>R$19,90 via Pix. Rápido e seguro antes de iniciar o trabalho.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <h3>Recebo a foto nova</h3>
+        <p>Em até 24h você recebe a versão restaurada em alta resolução.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <h3>Presenteie com amor</h3>
+        <p>Imprima, enquadre ou mande no WhatsApp. Presente que emociona.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREÇO -->
+<section class="price-section">
+  <div class="container">
+    <span class="section-label">Investimento</span>
+    <h2 class="section-title">Um presente que vale <em>muito mais</em></h2>
+    <div class="price-card">
+      <div class="price-value"><sup>R$</sup>19,90</div>
+      <div class="price-sub">por foto restaurada</div>
+      <ul class="price-perks">
+        <li>Foto em alta resolução</li>
+        <li>Entrega em até 24 horas</li>
+        <li>1 ajuste gratuito se necessário</li>
+        <li>Enviado direto pelo WhatsApp</li>
+      </ul>
+      <a href="https://wa.me/5500000000000?text=Ol%C3%A1%21+Quero+melhorar+uma+foto+para+o+Dia+das+M%C3%A3es!" class="btn-main" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Quero minha foto restaurada
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section">
+  <div class="container">
+    <span class="section-label">Dia das Mães — 11 de maio</span>
+    <h2 class="section-title" style="margin:0 auto 16px;">O prazo está <em>acabando</em></h2>
+    <p class="cta-sub">Peça hoje e receba a foto restaurada com tempo de sobra para presentear.</p>
+    <a href="https://wa.me/5500000000000?text=Ol%C3%A1%21+Quero+melhorar+uma+foto+para+o+Dia+das+M%C3%A3es!" class="btn-main" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Pedir agora pelo WhatsApp
+    </a>
+    <p class="urgency">⏰ Peça até dia 9 de maio para garantir a entrega a tempo</p>
+  </div>
+</section>
+
+<footer>
+  <p>Feito com carinho para o Dia das Mães ✦ Pagamento 100% via Pix</p>
+</footer>
+
+<script>
+  function initSlider(cardId, overlayId, handleId) {
+    const card = document.getElementById(cardId);
+    const overlay = document.getElementById(overlayId);
+    const handle = document.getElementById(handleId);
+    let dragging = false;
+
+    function setPos(pct) {
+      pct = Math.max(5, Math.min(95, pct));
+      overlay.style.width = pct + '%';
+      handle.style.left = pct + '%';
+    }
+
+    function getX(e) {
+      return e.touches ? e.touches[0].clientX : e.clientX;
+    }
+
+    card.addEventListener('mousedown', e => { dragging = true; });
+    card.addEventListener('touchstart', e => { dragging = true; }, { passive: true });
+
+    document.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      const rect = card.getBoundingClientRect();
+      const pct = ((getX(e) - rect.left) / rect.width) * 100;
+      setPos(pct);
+    });
+
+    document.addEventListener('touchmove', e => {
+      if (!dragging) return;
+      const rect = card.getBoundingClientRect();
+      const pct = ((getX(e) - rect.left) / rect.width) * 100;
+      setPos(pct);
+    }, { passive: true });
+
+    document.addEventListener('mouseup', () => { dragging = false; });
+    document.addEventListener('touchend', () => { dragging = false; });
+  }
+
+  initSlider('s1', 's1-overlay', 's1-handle');
+  initSlider('s2', 's2-overlay', 's2-handle');
+  initSlider('s3', 's3-overlay', 's3-handle');
+</script>
+
+</body>
+</html>
+HTMLEOF
+echo "done"
+Saída
+
+done
