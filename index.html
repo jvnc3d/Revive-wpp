@@ -129,7 +129,6 @@
   .scroll-hint {
     position: absolute;
     bottom: 28px;
-    left: 50%;
     transform: translateX(-50%);
     display: flex;
     flex-direction: column;
@@ -147,13 +146,14 @@
   .container { max-width: 900px; margin: 0 auto; }
 
   .section-label {
-    font-size: 14px;
+    font-size: 24px;
     font-weight: 700;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--accent);
     margin-bottom: 12px;
     display: block;
+    text-align: center;
   }
 
   .section-title {
@@ -161,7 +161,7 @@
     font-size: clamp(1.8rem, 4vw, 2.8rem);
     line-height: 1.2;
     color: var(--brown);
-    max-width: 560px;
+    text-align: center;
   }
 
   .section-title em { font-style: italic; color: var(--accent); }
@@ -293,7 +293,7 @@
   }
 
   .step-item h3 { font-size: 18px; font-weight: 700; color: var(--brown); margin-bottom: 10px; text-align: center; }
-  .step-item p { font-size: 13.5px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+  .step-item p { font-size: 13.5px; color: var(--muted); line-height: 1.6; font-weight: 500; }
 
   /* ── PRICE ── */
   .price-section {
@@ -468,7 +468,7 @@
 <!-- COMO FUNCIONA -->
 <section class="how-section">
   <div class="container">
-    <span class="section-label">Como funciona</span>
+    <span class="section-label">Como funciona?</span>
     <h2 class="section-title">Simples como mandar uma <em>mensagem</em></h2>
     <div class="steps-row">
       <div class="step-item">
