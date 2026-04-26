@@ -185,6 +185,8 @@
     aspect-ratio: 4/3;
     cursor: ew-resize;
     user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
   }
 
   .slider-card .after-img,
@@ -194,6 +196,11 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: 50% 50%;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
   }
 
   .slider-card .before-img {
@@ -204,7 +211,9 @@
     position: absolute;
     inset: 0;
     overflow: hidden;
-    width: 50%;
+    width: 100%;
+    --pos: 50%;
+    clip-path: inset(0 calc(100% - var(--pos)) 0 0);
     transition: none;
   }
 
@@ -433,9 +442,9 @@
 
       <!-- Slider 1 -->
       <div class="slider-card" id="s1">
-        <img class="after-img" src="https://i.imgur.com/NfEheDx.jpeg" alt="Foto restaurada">
+        <img class="after-img" src="assets/images/foto1-after.jpeg" alt="Foto restaurada">
         <div class="slider-overlay" id="s1-overlay">
-          <img class="before-img" src="https://i.imgur.com/oROvzNc.jpeg" alt="Foto original">
+          <img class="before-img" src="assets/images/foto1-before.jpeg" alt="Foto original">
         </div>
         <div class="slider-handle" id="s1-handle"></div>
         <div class="slider-labels"><span>Antes</span><span>Depois</span></div>
@@ -443,9 +452,9 @@
 
       <!-- Slider 2 -->
       <div class="slider-card" id="s2">
-        <img class="after-img" src="https://i.imgur.com/mqtpiB1.jpeg" alt="Foto restaurada">
+        <img class="after-img" src="assets/images/foto2-after.jpeg" alt="Foto restaurada">
         <div class="slider-overlay" id="s2-overlay">
-          <img class="before-img" src="https://i.imgur.com/jK8nocp.jpeg" alt="Foto original">
+          <img class="before-img" src="assets/images/foto2-before.jpeg" alt="Foto original">
         </div>
         <div class="slider-handle" id="s2-handle"></div>
         <div class="slider-labels"><span>Antes</span><span>Depois</span></div>
@@ -453,9 +462,9 @@
 
       <!-- Slider 3 -->
       <div class="slider-card" id="s3">
-        <img class="after-img" src="https://i.imgur.com/nVkfvwg.jpeg" alt="Foto restaurada">
+        <img class="after-img" src="assets/images/foto3-after.jpeg" alt="Foto restaurada">
         <div class="slider-overlay" id="s3-overlay">
-          <img class="before-img" src="https://i.imgur.com/L0ECh5K.jpeg" alt="Foto original">
+          <img class="before-img" src="assets/images/foto3-before.jpeg" alt="Foto original">
         </div>
         <div class="slider-handle" id="s3-handle"></div>
         <div class="slider-labels"><span>Antes</span><span>Depois</span></div>
@@ -664,33 +673,36 @@
 
     function setPos(pct) {
       pct = Math.max(5, Math.min(95, pct));
-      overlay.style.width = pct + '%';
+      overlay.style.setProperty('--pos', pct + '%');
       handle.style.left = pct + '%';
     }
 
-    function getX(e) {
-      return e.touches ? e.touches[0].clientX : e.clientX;
+    function updateFromClientX(clientX) {
+      const rect = card.getBoundingClientRect();
+      const pct = ((clientX - rect.left) / rect.width) * 100;
+      setPos(pct);
     }
 
-    card.addEventListener('mousedown', e => { dragging = true; });
-    card.addEventListener('touchstart', e => { dragging = true; }, { passive: true });
-
-    document.addEventListener('mousemove', e => {
-      if (!dragging) return;
-      const rect = card.getBoundingClientRect();
-      const pct = ((getX(e) - rect.left) / rect.width) * 100;
-      setPos(pct);
+    // Prevent native image dragging/selection on desktop and unify mouse/touch.
+    card.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      card.setPointerCapture(e.pointerId);
+      e.preventDefault();
+      updateFromClientX(e.clientX);
     });
 
-    document.addEventListener('touchmove', e => {
+    card.addEventListener('pointermove', (e) => {
       if (!dragging) return;
-      const rect = card.getBoundingClientRect();
-      const pct = ((getX(e) - rect.left) / rect.width) * 100;
-      setPos(pct);
-    }, { passive: true });
+      e.preventDefault();
+      updateFromClientX(e.clientX);
+    });
 
-    document.addEventListener('mouseup', () => { dragging = false; });
-    document.addEventListener('touchend', () => { dragging = false; });
+    function stopDrag() { dragging = false; }
+    card.addEventListener('pointerup', stopDrag);
+    card.addEventListener('pointercancel', stopDrag);
+
+    // Extra safety: never allow native drag ghost images.
+    card.addEventListener('dragstart', (e) => e.preventDefault());
   }
 
   initSlider('s1', 's1-overlay', 's1-handle');
